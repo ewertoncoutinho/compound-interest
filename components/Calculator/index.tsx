@@ -3,7 +3,7 @@
 import { useMemo, FormEvent } from "react";
 import { calculateCompoundInterest } from "@/lib/calculateCompoundInterest";
 import { useCurrencyFormatter } from "@/hooks/useCurrencyFormatter";
-import { DepositTiming, Frequency, MovementType, RateFrequency } from "@/types/frequency";
+import { Frequency, MovementType, RateFrequency } from "@/types/frequency";
 import { useCalculator } from "@/hooks/useCalculator";
 
 export default function Calculator() {
@@ -214,7 +214,7 @@ export default function Calculator() {
                 <option value="diaria">Diária</option>
               </select>
             </div>
-            <div>
+            {/* <div>
               <label
                 htmlFor="depositTiming"
                 className="block text-sm font-medium text-gray-700"
@@ -230,7 +230,7 @@ export default function Calculator() {
                 <option value="end">Final do Período</option>
                 <option value="beginning">Início do Período</option>
               </select>
-            </div>
+            </div> */}
           </div>
         )}
 
