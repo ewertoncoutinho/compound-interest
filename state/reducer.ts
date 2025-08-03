@@ -9,7 +9,7 @@ export const initialState: CalculatorState = {
   interestRate: 5,
   interestRateFrequency: "anual",
   movementType: "none",
-  depositTiming: "end",
+  // depositTiming: "end",
   years: 5,
   months: 0,
   results: null,
@@ -35,8 +35,8 @@ export function calculatorReducer(state: CalculatorState, action: CalculatorActi
       return { ...state, interestRateFrequency: action.payload };
     case "SET_MOVEMENT_TYPE":
       return { ...state, movementType: action.payload };
-    case "SET_DEPOSIT_TIMING":
-      return { ...state, depositTiming: action.payload };
+    // case "SET_DEPOSIT_TIMING":
+    //   return { ...state, depositTiming: action.payload };
     case "SET_YEARS":
       return { ...state, years: action.payload };
     case "SET_MONTHS":
