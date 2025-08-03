@@ -1,4 +1,4 @@
-import { DepositTiming, MovementType, RateFrequency, Frequency, CalculationResult, YearlyBreakdown } from "@/types/frequency";
+import { MovementType, RateFrequency, Frequency, CalculationResult, YearlyBreakdown } from "@/types/frequency";
 
 const frequencyMap: Record<Frequency, number> = {
   anual: 1,
@@ -25,7 +25,7 @@ export function calculateCompoundInterest(params: {
   interestRateFrequency: RateFrequency;
   termInYears: number;
   movementType: MovementType;
-  depositTiming: DepositTiming;
+  // depositTiming: DepositTiming;
 }): { result: CalculationResult; breakdown: YearlyBreakdown[] } {
   const {
     initialInvestment,
@@ -37,7 +37,7 @@ export function calculateCompoundInterest(params: {
     interestRateFrequency,
     termInYears,
     movementType,
-    depositTiming,
+    // depositTiming,
   } = params;
 
   // Normalização da taxa para taxa anual

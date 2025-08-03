@@ -19,7 +19,7 @@ export default function Calculator() {
       regularDeposit,
       regularWithdrawal,
       depositFrequency,
-      depositTiming,
+      // depositTiming,
       interestRate,
       interestRateFrequency,
       compoundFrequency,
@@ -36,7 +36,7 @@ export default function Calculator() {
       interestRateFrequency,
       termInYears,
       movementType,
-      depositTiming,
+      // depositTiming,
     });
 
     dispatch({ type: "SET_RESULTS", payload: result });
@@ -138,6 +138,7 @@ export default function Calculator() {
               <option value="semestral">Semestralmente</option>
               <option value="trimestral">Trimestralmente</option>
               <option value="mensal">Mensalmente</option>
+              <option value="semanal">Semanalmente</option>
               <option value="diaria">Diariamente</option>
             </select>
           </div>
