@@ -1,139 +1,47 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useMemo, FormEvent, useReducer } from "react";
+import { calculatorReducer, initialState } from "./reducer";
 
-type Frequency = "anual" | "semestral" | "trimestral" | "mensal" | "semanal" | "diaria";
-type Timing = "beginning" | "end";
-type RateFrequency = "anual" | "mensal" | "semanal";
-type MovementType = "none" | "deposits" | "withdrawals" | "both";
-
-const frequencyMap: Record<Frequency, number> = {
-  anual: 1,
-  semestral: 2,
-  trimestral: 4,
-  mensal: 12,
-  semanal: 52,
-  diaria: 365,
-};
-
-interface CalculationResult {
-  finalBalance: number;
-  totalPrincipal: number;
-  totalInterest: number;
-}
-
-interface YearlyBreakdown {
-  year: number;
-  startingBalance: number;
-  deposits: number;
-  interest: number;
-  endBalance: number;
-}
+import { calculateCompoundInterest } from "@/lib/calculateCompoundInterest";
+import { useCurrencyFormatter } from "@/lib/hooks/useCurrencyFormatter";
+import { Frequency, MovementType, DepositTiming, RateFrequency } from "./types";
 
 export default function Calculator() {
-  const [initialInvestment, setInitialInvestment] = useState<number>(5000);
-  const [regularDeposit, setRegularDeposit] = useState<number>(0);
-  const [regularWithdrawal, setRegularWithdrawal] = useState<number>(0);
-  const [depositFrequency, setDepositFrequency] = useState<Frequency>("mensal");
-  const [depositTiming, setDepositTiming] = useState<Timing>("end");
-  const [interestRate, setInterestRate] = useState<number>(5);
-  const [compoundFrequency, setCompoundFrequency] = useState<Frequency>("mensal");
-  const [interestRateFrequency, setInterestRateFrequency] = useState<RateFrequency>("anual");
-  const [years, setYears] = useState<number>(5);
-  const [months, setMonths] = useState<number>(0);
-  const [movementType, setMovementType] = useState<MovementType>("none");
-
-  const [results, setResults] = useState<CalculationResult | null>(null);
-  const [breakdown, setBreakdown] = useState<YearlyBreakdown[]>([]);
-
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
+  const [state, dispatch] = useReducer(calculatorReducer, initialState);
+  const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
+  const formatCurrency = useCurrencyFormatter();
 
   const handleCalculate = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const rate =
-      interestRateFrequency === "mensal"
-        ? (interestRate / 100) * 12
-        : interestRateFrequency === "semanal"
-          ? (interestRate / 100) * 52
-          : interestRate / 100;
+    const {
+      initialInvestment,
+      regularDeposit,
+      regularWithdrawal,
+      depositFrequency,
+      depositTiming,
+      interestRate,
+      interestRateFrequency,
+      compoundFrequency,
+      movementType,
+    } = state;
 
-    const termInYears = years + months / 12;
-
-    const principal = initialInvestment || 0;
-    const depositAmount = regularDeposit || 0;
-    const withdrawalAmount = regularWithdrawal || 0;
-
-    const compoundingsPerYear = frequencyMap[compoundFrequency];
-    const depositsPerYear = frequencyMap[depositFrequency];
-    const totalPeriods = Math.round(termInYears * compoundingsPerYear);
-    const movementsPerPeriod = depositsPerYear / compoundingsPerYear;
-
-    let balance = principal;
-    let totalInterest = 0;
-    const breakdown: YearlyBreakdown[] = [];
-
-    let yearData: Omit<YearlyBreakdown, "endBalance"> = {
-      year: 1,
-      startingBalance: principal,
-      deposits: 0,
-      interest: 0,
-    };
-
-    const applyMovements = () => {
-      if (movementType === "deposits" || movementType === "both") {
-        balance += depositAmount;
-        yearData.deposits += depositAmount;
-      }
-      if (movementType === "withdrawals" || movementType === "both") {
-        balance -= withdrawalAmount;
-        yearData.deposits -= withdrawalAmount; // negativo
-      }
-    };
-
-    for (let i = 1; i <= totalPeriods; i++) {
-      if (depositTiming === "beginning") {
-        for (let m = 0; m < movementsPerPeriod; m++) applyMovements();
-      }
-
-      const interest = balance * (rate / compoundingsPerYear);
-      balance += interest;
-      yearData.interest += interest;
-
-      if (depositTiming === "end") {
-        for (let m = 0; m < movementsPerPeriod; m++) applyMovements();
-      }
-
-      const isEndOfYear = i % compoundingsPerYear === 0 || i === totalPeriods;
-      if (isEndOfYear) {
-        breakdown.push({ ...yearData, endBalance: balance });
-
-        yearData = {
-          year: yearData.year + 1,
-          startingBalance: balance,
-          deposits: 0,
-          interest: 0,
-        };
-      }
-    }
-
-    const totalDeposits = termInYears * depositsPerYear * depositAmount;
-    const totalWithdrawals = termInYears * depositsPerYear * withdrawalAmount;
-    const totalPrincipal = principal + totalDeposits - totalWithdrawals;
-    totalInterest = balance - totalPrincipal;
-
-    setResults({
-      finalBalance: balance,
-      totalPrincipal,
-      totalInterest,
+    const { result, breakdown } = calculateCompoundInterest({
+      initialInvestment,
+      regularDeposit,
+      regularWithdrawal,
+      depositFrequency,
+      compoundFrequency,
+      interestRate,
+      interestRateFrequency,
+      termInYears,
+      movementType,
+      depositTiming,
     });
 
-    setBreakdown(breakdown);
+    dispatch({ type: "SET_RESULTS", payload: result });
+    dispatch({ type: "SET_BREAKDOWN", payload: breakdown });
   };
 
   return (
@@ -150,9 +58,9 @@ export default function Calculator() {
             <input
               type="number"
               id="initialInvestment"
-              value={initialInvestment}
-              onChange={(e) => setInitialInvestment(Number(e.target.value))}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              value={state.initialInvestment}
+              onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
             />
           </div>
 
@@ -168,16 +76,16 @@ export default function Calculator() {
                 type="number"
                 step="0.01"
                 id="interestRate"
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                value={state.interestRate}
+                onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
               />
             </div>
             <div>
               <select
                 id="interestRateFrequency"
-                value={interestRateFrequency}
-                onChange={(e) => setInterestRateFrequency(e.target.value as RateFrequency)}
+                value={state.interestRateFrequency}
+                onChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e.target.value as RateFrequency })}
                 className="h-[42px] mt-1 block w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="anual">Anual</option>
@@ -195,8 +103,8 @@ export default function Calculator() {
                 <input
                   type="number"
                   id="years"
-                  value={years}
-                  onChange={(e) => setYears(Number(e.target.value))}
+                  value={state.years}
+                  onChange={(e) => dispatch({ type: "SET_YEARS", payload: Number(e.target.value) })}
                   className="w-20 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
                 <span className="text-sm text-gray-600">Anos</span>
@@ -205,8 +113,8 @@ export default function Calculator() {
                 <input
                   type="number"
                   id="months"
-                  value={months}
-                  onChange={(e) => setMonths(Number(e.target.value))}
+                  value={state.months}
+                  onChange={(e) => dispatch({ type: "SET_MONTHS", payload: Number(e.target.value) })}
                   className="w-20 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
                 <span className="text-sm text-gray-600">Meses</span>
@@ -223,9 +131,9 @@ export default function Calculator() {
             </label>
             <select
               id="compoundFrequency"
-              value={compoundFrequency}
-              onChange={(e) => setCompoundFrequency(e.target.value as Frequency)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              value={state.compoundFrequency}
+              onChange={(e) => dispatch({ type: "SET_COMPOUND_FREQUENCY", payload: e.target.value as Frequency })}
             >
               <option value="anual">Anualmente</option>
               <option value="semestral">Semestralmente</option>
@@ -238,21 +146,14 @@ export default function Calculator() {
 
 
         <div>
-          <label htmlFor="movementType" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="state.movementType" className="block text-sm font-medium text-gray-700">
             Tipo de Movimentação
           </label>
           <select
-            id="movementType"
-            value={movementType}
-            onChange={(e) => {
-              ;
-              setMovementType(e.target.value as MovementType);
-              if (e.target.value === "none") {
-                setRegularDeposit(0);
-                setRegularWithdrawal(0);
-              }
-            }}
+            id="state.movementType"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            value={state.movementType}
+            onChange={(e) => dispatch({ type: "SET_MOVEMENT_TYPE", payload: e.target.value as MovementType })}
           >
             <option value="none">Nenhuma</option>
             <option value="deposits">Apenas Depósitos</option>
@@ -262,7 +163,7 @@ export default function Calculator() {
         </div>
 
 
-        {(movementType === "deposits" || movementType === "both") && (
+        {(state.movementType === "deposits" || state.movementType === "both") && (
           <div className="mt-4">
             <label htmlFor="regularDeposit" className="block text-sm font-medium text-gray-700">
               Depósito Regular (R$)
@@ -270,14 +171,14 @@ export default function Calculator() {
             <input
               type="number"
               id="regularDeposit"
-              value={regularDeposit}
-              onChange={(e) => setRegularDeposit(Number(e.target.value))}
+              value={state.regularDeposit}
+              onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         )}
 
-        {(movementType === "withdrawals" || movementType === "both") && (
+        {(state.movementType === "withdrawals" || state.movementType === "both") && (
           <div className="mt-4">
             <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-gray-700">
               Retirada Regular (R$)
@@ -285,14 +186,14 @@ export default function Calculator() {
             <input
               type="number"
               id="regularWithdrawal"
-              value={regularWithdrawal}
-              onChange={(e) => setRegularWithdrawal(Number(e.target.value))}
+              value={state.regularWithdrawal}
+              onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         )}
 
-        {(movementType !== "none") && (
+        {(state.movementType !== "none") && (
           <div>
             <div>
               <label
@@ -303,8 +204,8 @@ export default function Calculator() {
               </label>
               <select
                 id="depositFrequency"
-                value={depositFrequency}
-                onChange={(e) => setDepositFrequency(e.target.value as Frequency)}
+                value={state.depositFrequency}
+                onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="anual">Anual</option>
@@ -322,8 +223,8 @@ export default function Calculator() {
               </label>
               <select
                 id="depositTiming"
-                value={depositTiming}
-                onChange={(e) => setDepositTiming(e.target.value as Timing)}
+                value={state.depositTiming}
+                onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="end">Final do Período</option>
@@ -342,7 +243,7 @@ export default function Calculator() {
           </button>
         </div>
       </form>
-      {results && (
+      {state.results && (
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
             Resultados
@@ -351,7 +252,7 @@ export default function Calculator() {
             <div className="bg-blue-100 p-4 rounded-lg">
               <p className="text-sm text-blue-800 font-semibold">Valor Final</p>
               <p className="text-2xl font-bold text-blue-900">
-                {formatCurrency(results.finalBalance)}
+                {formatCurrency(state.results.finalBalance)}
               </p>
             </div>
             <div className="bg-yellow-100 p-4 rounded-lg">
@@ -359,7 +260,7 @@ export default function Calculator() {
                 Total Investido
               </p>
               <p className="text-2xl font-bold text-yellow-900">
-                {formatCurrency(results.totalPrincipal)}
+                {formatCurrency(state.results.totalPrincipal)}
               </p>
             </div>
             <div className="bg-green-100 p-4 rounded-lg">
@@ -367,7 +268,7 @@ export default function Calculator() {
                 Total em Juros
               </p>
               <p className="text-2xl font-bold text-green-900">
-                {formatCurrency(results.totalInterest)}
+                {formatCurrency(state.results.totalInterest)}
               </p>
             </div>
           </div>
@@ -410,10 +311,10 @@ export default function Calculator() {
                     -
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 font-bold">
-                    {formatCurrency(initialInvestment)}
+                    {formatCurrency(state.initialInvestment)}
                   </td>
                 </tr>
-                {breakdown.map((item) => (
+                {state.breakdown.map((item) => (
                   <tr key={item.year} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {item.year}
@@ -425,7 +326,7 @@ export default function Calculator() {
                       {formatCurrency(item.interest)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700 font-semibold">
-                      {formatCurrency(item.endBalance - initialInvestment)}
+                      {formatCurrency(item.endBalance - state.initialInvestment)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 font-bold">
                       {formatCurrency(item.endBalance)}
