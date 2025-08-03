@@ -1,18 +1,4 @@
-import { DepositTiming, Frequency, MovementType, RateFrequency } from "@/app/components/Calculator/types";
-
-export interface CalculationResult {
-  finalBalance: number;
-  totalPrincipal: number;
-  totalInterest: number;
-}
-
-export interface YearlyBreakdown {
-  year: number;
-  startingBalance: number;
-  deposits: number;
-  interest: number;
-  endBalance: number;
-}
+import { DepositTiming, MovementType, RateFrequency, Frequency, CalculationResult, YearlyBreakdown } from "@/types/frequency";
 
 const frequencyMap: Record<Frequency, number> = {
   anual: 1,

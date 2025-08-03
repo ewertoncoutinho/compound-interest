@@ -1,6 +1,6 @@
 // app/page.js
 import Head from 'next/head';
-import Calculator from './components/Calculator'; // Criaremos este componente a seguir
+import Calculator from '@/components/Calculator'; // Criaremos este componente a seguir
 
 export default function Home() {
   return (

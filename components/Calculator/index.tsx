@@ -1,14 +1,13 @@
 "use client";
 
-import { useMemo, FormEvent, useReducer } from "react";
-import { calculatorReducer, initialState } from "./reducer";
-
+import { useMemo, FormEvent } from "react";
 import { calculateCompoundInterest } from "@/lib/calculateCompoundInterest";
-import { useCurrencyFormatter } from "@/lib/hooks/useCurrencyFormatter";
-import { Frequency, MovementType, DepositTiming, RateFrequency } from "./types";
+import { useCurrencyFormatter } from "@/hooks/useCurrencyFormatter";
+import { DepositTiming, Frequency, MovementType, RateFrequency } from "@/types/frequency";
+import { useCalculator } from "@/hooks/useCalculator";
 
 export default function Calculator() {
-  const [state, dispatch] = useReducer(calculatorReducer, initialState);
+  const [state, dispatch] = useCalculator();
   const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
   const formatCurrency = useCurrencyFormatter();
 

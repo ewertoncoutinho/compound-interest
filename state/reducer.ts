@@ -1,4 +1,4 @@
-import { CalculatorState, CalculatorAction } from "./types";
+import { CalculatorState, CalculatorAction } from "@/state/types";
 
 export const initialState: CalculatorState = {
   initialInvestment: 5000,

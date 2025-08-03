@@ -1,10 +1,4 @@
-import { CalculationResult, YearlyBreakdown } from "@/lib/calculateCompoundInterest";
-
-export type Frequency = "anual" | "semestral" | "trimestral" | "mensal" | "semanal" | "diaria";
-export type DepositTiming = "start" | "end";
-export type Timing = "beginning" | "end";
-export type RateFrequency = "anual" | "mensal" | "semanal";
-export type MovementType = "none" | "deposits" | "withdrawals" | "both";
+import { CalculationResult, DepositTiming, Frequency, MovementType, RateFrequency, YearlyBreakdown } from "@/types/frequency";
 
 export interface CalculatorState {
   initialInvestment: number;
