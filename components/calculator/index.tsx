@@ -81,7 +81,7 @@ export const Calculator = () => {
             onValueChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e as Frequency })}
           >
             <SelectTrigger className="w-[280px]" id="interestRateFrequency">
-              <SelectValue placeholder="Select a timezone" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent
             >
@@ -107,7 +107,7 @@ export const Calculator = () => {
 
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a timezone" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="diaria">Daily (365/yr)</SelectItem>
@@ -151,9 +151,10 @@ export const Calculator = () => {
             <Select
               value={state.movementType}
               onValueChange={(e) => dispatch({ type: "SET_MOVEMENT_TYPE", payload: e as MovementType })}
+              disabled
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a timezone" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Nenhuma</SelectItem>
