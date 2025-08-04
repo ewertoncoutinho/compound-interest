@@ -2,9 +2,10 @@
 
 import { useMemo, FormEvent } from "react";
 import { calculateCompoundInterest } from "@/lib/compoundInterest";
-import { Frequency, MovementType, RateFrequency } from "@/types/frequency";
+import { DepositTiming, Frequency, MovementType, RateFrequency } from "@/types/frequency";
 import { useCalculator } from "@/hooks/useCalculator";
-import { Breakdown } from "@/components";
+import Breakdown from "@/components/breakdown";
+import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui";
 
 export default function Calculator() {
   const [state, dispatch] = useCalculator();
@@ -18,7 +19,7 @@ export default function Calculator() {
       regularDeposit,
       regularWithdrawal,
       depositFrequency,
-      // depositTiming,
+      depositTiming,
       interestRate,
       interestRateFrequency,
       compoundFrequency,
@@ -35,7 +36,7 @@ export default function Calculator() {
       interestRateFrequency,
       termInYears,
       movementType,
-      // depositTiming,
+      depositTiming,
     });
 
     dispatch({ type: "SET_RESULTS", payload: result });
@@ -44,121 +45,195 @@ export default function Calculator() {
 
   return (
     <>
-      <form onSubmit={handleCalculate}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-          <div className="md:col-span-2">
+      <form onSubmit={handleCalculate} className="grid gap-y-4">
+        <div className="md:col-span-2">
+          <label
+            htmlFor="initialInvestment"
+            className="flex mb-1 text-sm font-medium text-gray-700"
+          >
+            Initial investment:
+          </label>
+          <Input
+            type="tel"
+            id="initialInvestment"
+            value={state.initialInvestment || ""}
+            placeholder="0"
+            onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
+          />
+        </div>
+
+        <div className="flex items-end gap-2">
+          <div className="flex-grow">
             <label
-              htmlFor="initialInvestment"
-              className="block text-sm font-medium text-gray-700"
+              htmlFor="interestRate"
+              className="flex mb-1 text-sm font-medium text-gray-700"
             >
-              Investimento Inicial (R$)
+              Interest rate:
             </label>
-            <input
-              type="number"
-              id="initialInvestment"
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              value={state.initialInvestment}
-              onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
+            <Input
+              type="tel"
+              id="interestRate"
+              value={state.interestRate || ""}
+              placeholder="0"
+              onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
             />
           </div>
+          <Select
+            value={state.interestRateFrequency}
+            onValueChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e as RateFrequency })}
+          >
+            <SelectTrigger className="w-[280px]" id="interestRateFrequency">
+              <SelectValue placeholder="Select a timezone" />
+            </SelectTrigger>
+            <SelectContent
+            >
+              <SelectItem value="anual">Anual</SelectItem >
+              <SelectItem value="mensal">Mensal</SelectItem >
+              <SelectItem value="semanal">Semanal</SelectItem >
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <label
+            id="compoundFrequency"
+            className="flex mb-2 text-sm font-medium text-gray-700"
+          >
+            Compound frequency:
+          </label>
+          <Select
+            aria-labelledby="compoundFrequency"
+            value={state.compoundFrequency}
+            onValueChange={(e) => dispatch({ type: "SET_COMPOUND_FREQUENCY", payload: e as Frequency })}
 
-          <div className="flex items-end space-x-2">
-            <div className="flex-grow">
-              <label
-                htmlFor="interestRate"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Taxa de Juros (%)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                id="interestRate"
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                value={state.interestRate}
-                onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
-              />
-            </div>
-            <div>
-              <select
-                id="interestRateFrequency"
-                value={state.interestRateFrequency}
-                onChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e.target.value as RateFrequency })}
-                className="h-[42px] mt-1 block w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="anual">Anual</option>
-                <option value="mensal">Mensal</option>
-                <option value="semanal">Semanal</option>
-              </select>
-            </div>
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a timezone" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="anual">Yearly (1/yr)</SelectItem>
+              <SelectItem value="trimestral">Quarterly (4/yr)</SelectItem>
+              <SelectItem value="mensal">Monthly (12/yr)</SelectItem>
+              <SelectItem value="semanal">Weekly (52/yr)</SelectItem>
+              <SelectItem value="diaria">Daily (365/yr)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-2">
+          <div>
+            <label className="flex mb-2 text-sm font-medium text-gray-700">
+              Years:
+            </label>
+            <Input
+              id="years"
+              value={state.years || ""}
+              placeholder="0"
+              onChange={(e) => dispatch({ type: "SET_YEARS", payload: Number(e.target.value) })}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Período de Investimento
+            <label className="flex mb-2 text-sm font-medium text-gray-700">
+              Months:
             </label>
-            <div className="flex items-center space-x-3 mt-1">
-              <div className="flex items-center space-x-1">
-                <input
-                  type="number"
-                  id="years"
-                  value={state.years}
-                  onChange={(e) => dispatch({ type: "SET_YEARS", payload: Number(e.target.value) })}
-                  className="w-20 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                <span className="text-sm text-gray-600">Anos</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <input
-                  type="number"
-                  id="months"
-                  value={state.months}
-                  onChange={(e) => dispatch({ type: "SET_MONTHS", payload: Number(e.target.value) })}
-                  className="w-20 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                <span className="text-sm text-gray-600">Meses</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:col-span-2">
-            <label
-              htmlFor="compoundFrequency"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Juros Compostos
-            </label>
-            <select
-              id="compoundFrequency"
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              value={state.compoundFrequency}
-              onChange={(e) => dispatch({ type: "SET_COMPOUND_FREQUENCY", payload: e.target.value as Frequency })}
-            >
-              <option value="anual">Anualmente</option>
-              <option value="semestral">Semestralmente</option>
-              <option value="trimestral">Trimestralmente</option>
-              <option value="mensal">Mensalmente</option>
-              <option value="semanal">Semanalmente</option>
-              <option value="diaria">Diariamente</option>
-            </select>
+            <Input
+              id="months"
+              value={state.months || ""}
+              placeholder="0"
+              onChange={(e) => dispatch({ type: "SET_MONTHS", payload: Number(e.target.value) })}
+            />
           </div>
         </div>
 
-
         <div>
-          <label htmlFor="state.movementType" className="block text-sm font-medium text-gray-700">
-            Tipo de Movimentação
-          </label>
-          <select
-            id="state.movementType"
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            value={state.movementType}
-            onChange={(e) => dispatch({ type: "SET_MOVEMENT_TYPE", payload: e.target.value as MovementType })}
-          >
-            <option value="none">Nenhuma</option>
-            <option value="deposits">Apenas Depósitos</option>
-            <option value="withdrawals">Apenas Retiradas</option>
-            <option value="both">Depósitos e Retiradas</option>
-          </select>
+          <div>
+            <label htmlFor="state.movementType" className="flex mb-2 text-sm font-medium text-gray-700">
+              Tipo de Movimentação
+            </label>
+            <Select
+              value={state.movementType}
+              onValueChange={(e) => dispatch({ type: "SET_MOVEMENT_TYPE", payload: e as MovementType })}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a timezone" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Nenhuma</SelectItem>
+                <SelectItem value="deposits">Apenas Depósitos</SelectItem>
+                <SelectItem value="withdrawals">Apenas Retiradas</SelectItem>
+                <SelectItem value="both">Depósitos e Retiradas</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {(state.movementType === "deposits" || state.movementType === "both") && (
+            <div className="mt-4">
+              <label htmlFor="regularDeposit" className="block text-sm font-medium text-gray-700">
+                Depósito Regular (R$)
+              </label>
+              <input
+                type="number"
+                id="regularDeposit"
+                value={state.regularDeposit}
+                onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          )}
+
+          {(state.movementType === "withdrawals" || state.movementType === "both") && (
+            <div className="mt-4">
+              <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-gray-700">
+                Retirada Regular (R$)
+              </label>
+              <input
+                type="number"
+                id="regularWithdrawal"
+                value={state.regularWithdrawal}
+                onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          )}
+
+          {(state.movementType !== "none") && (
+            <div>
+              <div>
+                <label
+                  htmlFor="depositFrequency"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Frequência do Depósito
+                </label>
+                <select
+                  id="depositFrequency"
+                  value={state.depositFrequency}
+                  onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="anual">Anual</option>
+                  <option value="mensal">Mensal</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="diaria">Diária</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="depositTiming"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Adicionar Depósito no
+                </label>
+                <select
+                  id="depositTiming"
+                  value={state.depositTiming}
+                  onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="end">Final do Período</option>
+                  <option value="beginning">Início do Período</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
 
 
@@ -213,7 +288,7 @@ export default function Calculator() {
                 <option value="diaria">Diária</option>
               </select>
             </div>
-            {/* <div>
+            <div>
               <label
                 htmlFor="depositTiming"
                 className="block text-sm font-medium text-gray-700"
@@ -229,7 +304,7 @@ export default function Calculator() {
                 <option value="end">Final do Período</option>
                 <option value="beginning">Início do Período</option>
               </select>
-            </div> */}
+            </div>
           </div>
         )}
 
@@ -242,7 +317,7 @@ export default function Calculator() {
           </button>
         </div>
       </form>
-      {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown}/>}
+      {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown} />}
     </>
   );
 }
