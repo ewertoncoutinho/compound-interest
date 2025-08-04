@@ -43,11 +43,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-body {
-  background-color: #f0f2f5; /* Um cinza claro, suave */
-  color: #1c1e21; /* Um cinza escuro para o texto */
-}
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

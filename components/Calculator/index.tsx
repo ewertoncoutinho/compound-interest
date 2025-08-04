@@ -45,16 +45,15 @@ export default function Calculator() {
 
   return (
     <>
-      <form onSubmit={handleCalculate} className="grid gap-y-4">
+      <form onSubmit={handleCalculate} className="gap-y-4 max-w-[360px]">
         <div className="md:col-span-2">
           <label
             htmlFor="initialInvestment"
-            className="flex mb-1 text-sm font-medium text-gray-700"
+            className="flex mb-1 text-sm font-medium text-neutral-400"
           >
             Initial investment:
           </label>
           <Input
-            type="tel"
             id="initialInvestment"
             value={state.initialInvestment || ""}
             placeholder="0"
@@ -66,12 +65,11 @@ export default function Calculator() {
           <div className="flex-grow">
             <label
               htmlFor="interestRate"
-              className="flex mb-1 text-sm font-medium text-gray-700"
+              className="flex mb-1 text-sm font-medium text-neutral-400"
             >
               Interest rate:
             </label>
             <Input
-              type="tel"
               id="interestRate"
               value={state.interestRate || ""}
               placeholder="0"
@@ -98,7 +96,7 @@ export default function Calculator() {
         <div>
           <label
             id="compoundFrequency"
-            className="flex mb-2 text-sm font-medium text-gray-700"
+            className="flex mb-2 text-sm font-medium text-neutral-400"
           >
             Compound frequency:
           </label>
@@ -122,7 +120,7 @@ export default function Calculator() {
         </div>
         <div className="flex gap-2">
           <div>
-            <label className="flex mb-2 text-sm font-medium text-gray-700">
+            <label className="flex mb-2 text-sm font-medium text-neutral-400">
               Years:
             </label>
             <Input
@@ -133,7 +131,7 @@ export default function Calculator() {
             />
           </div>
           <div>
-            <label className="flex mb-2 text-sm font-medium text-gray-700">
+            <label className="flex mb-2 text-sm font-medium text-neutral-400">
               Months:
             </label>
             <Input
@@ -147,7 +145,7 @@ export default function Calculator() {
 
         <div>
           <div>
-            <label htmlFor="state.movementType" className="flex mb-2 text-sm font-medium text-gray-700">
+            <label htmlFor="state.movementType" className="flex mb-2 text-sm font-medium text-neutral-400">
               Tipo de Movimentação
             </label>
             <Select
@@ -168,7 +166,7 @@ export default function Calculator() {
 
           {(state.movementType === "deposits" || state.movementType === "both") && (
             <div className="mt-4">
-              <label htmlFor="regularDeposit" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="regularDeposit" className="block text-sm font-medium text-neutral-400">
                 Depósito Regular (R$)
               </label>
               <input
@@ -176,14 +174,14 @@ export default function Calculator() {
                 id="regularDeposit"
                 value={state.regularDeposit}
                 onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           )}
 
           {(state.movementType === "withdrawals" || state.movementType === "both") && (
             <div className="mt-4">
-              <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-neutral-400">
                 Retirada Regular (R$)
               </label>
               <input
@@ -191,7 +189,7 @@ export default function Calculator() {
                 id="regularWithdrawal"
                 value={state.regularWithdrawal}
                 onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           )}
@@ -201,7 +199,7 @@ export default function Calculator() {
               <div>
                 <label
                   htmlFor="depositFrequency"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-neutral-400"
                 >
                   Frequência do Depósito
                 </label>
@@ -209,7 +207,7 @@ export default function Calculator() {
                   id="depositFrequency"
                   value={state.depositFrequency}
                   onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="anual">Anual</option>
                   <option value="mensal">Mensal</option>
@@ -220,7 +218,7 @@ export default function Calculator() {
               <div>
                 <label
                   htmlFor="depositTiming"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-neutral-400"
                 >
                   Adicionar Depósito no
                 </label>
@@ -228,7 +226,7 @@ export default function Calculator() {
                   id="depositTiming"
                   value={state.depositTiming}
                   onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="end">Final do Período</option>
                   <option value="beginning">Início do Período</option>
@@ -241,7 +239,7 @@ export default function Calculator() {
 
         {(state.movementType === "deposits" || state.movementType === "both") && (
           <div className="mt-4">
-            <label htmlFor="regularDeposit" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="regularDeposit" className="block text-sm font-medium text-neutral-400">
               Depósito Regular (R$)
             </label>
             <input
@@ -249,14 +247,14 @@ export default function Calculator() {
               id="regularDeposit"
               value={state.regularDeposit}
               onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         )}
 
         {(state.movementType === "withdrawals" || state.movementType === "both") && (
           <div className="mt-4">
-            <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-neutral-400">
               Retirada Regular (R$)
             </label>
             <input
@@ -264,7 +262,7 @@ export default function Calculator() {
               id="regularWithdrawal"
               value={state.regularWithdrawal}
               onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
         )}
@@ -274,7 +272,7 @@ export default function Calculator() {
             <div>
               <label
                 htmlFor="depositFrequency"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-neutral-400"
               >
                 Frequência do Depósito
               </label>
@@ -282,7 +280,7 @@ export default function Calculator() {
                 id="depositFrequency"
                 value={state.depositFrequency}
                 onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="anual">Anual</option>
                 <option value="mensal">Mensal</option>
@@ -293,7 +291,7 @@ export default function Calculator() {
             <div>
               <label
                 htmlFor="depositTiming"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-neutral-400"
               >
                 Adicionar Depósito no
               </label>
@@ -301,7 +299,7 @@ export default function Calculator() {
                 id="depositTiming"
                 value={state.depositTiming}
                 onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="end">Final do Período</option>
                 <option value="beginning">Início do Período</option>

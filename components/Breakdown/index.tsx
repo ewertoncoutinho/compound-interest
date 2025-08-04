@@ -41,7 +41,7 @@ export const Breakdown = ({ initialInvestment, results, breakdown }: BreakdownPr
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                     Detalhamento
                 </h3>
-                <table className="min-w-full bg-white border border-gray-200">
+                <table className="min-w-full border border-gray-200">
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

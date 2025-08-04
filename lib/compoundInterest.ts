@@ -1,4 +1,4 @@
-import { MovementType, RateFrequency, Frequency, CalculationResult, YearlyBreakdown, DepositTiming } from "@/types/frequency";
+import { MovementType, Frequency, CalculationResult, YearlyBreakdown, DepositTiming } from "@/types/frequency";
 
 const frequencyMap: Record<Frequency, number> = {
   anual: 1,
@@ -15,7 +15,7 @@ export function calculateCompoundInterest(params: {
   depositFrequency: Frequency;
   compoundFrequency: Frequency;
   interestRate: number;
-  interestRateFrequency: RateFrequency;
+  interestRateFrequency: Frequency;
   termInYears: number;
   movementType: MovementType;
   depositTiming: DepositTiming;
