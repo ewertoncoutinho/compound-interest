@@ -8,7 +8,7 @@ import Breakdown from "@/components/breakdown";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-export default function Calculator() {
+export const Calculator = () => {
   const [state, dispatch] = useCalculator();
   const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
 
@@ -322,3 +322,5 @@ export default function Calculator() {
     </>
   );
 }
+
+export default Calculator;
