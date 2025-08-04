@@ -1,7 +1,0 @@
-approvedPackages:
-  - name: '@tailwindcss/oxide'
-    version: '*'
-  - name: 'sharp'
-    version: '*'
-  - name: 'unrs-resolver'
-    version: '*'
