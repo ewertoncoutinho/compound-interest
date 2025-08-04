@@ -11,6 +11,7 @@ import Breakdown from "@/components/breakdown";
 export const Calculator = () => {
   const [state, dispatch] = useCalculator();
   const [currency, setCurrency] = useState("R$");
+  const currencies = ["R$", "$", "€", "£", "₹", "¥"];
   const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
 
   const handleCalculate = (e: FormEvent<HTMLFormElement>) => {
@@ -47,7 +48,7 @@ export const Calculator = () => {
 
   return (
     <>
-      <div className="mx-auto rounded-xl px-4 mt-4 max-w-[360px]">
+      <div className="mx-auto rounded-xl px-4 mt-6 md:max-w-[360px]">
         <div className="border border-b-0 rounded-t-sm h-10 flex items-center justify-center gap-2 text-neutral-300">
           <ChartColumn size={20} />
           <h1 className='text-md'>Compound Interest</h1>
@@ -60,55 +61,18 @@ export const Calculator = () => {
             >
               Currency:
             </label>
-            <div className="flex">
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-r-none border-r-0 flex-1"
-                onClick={() => setCurrency("R$")}
-              >
-                R$
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-none border-r-0 flex-1"
-                onClick={() => setCurrency("$")}
-              >
-                $
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-none border-r-0 flex-1"
-                onClick={() => setCurrency("€")}
-              >
-                €
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-none border-r-0 flex-1"
-                onClick={() => setCurrency("£")}
-              >
-                £
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-none border-r-0 flex-1"
-                onClick={() => setCurrency("₹")}
-              >
-                ₹
-              </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer  rounded-l-none flex-1"
-                onClick={() => setCurrency("¥")}
-              >
-                ¥
-              </Button>
+            <div className="flex border dark:border-input rounded-md overflow-hidden">
+              {currencies.map((symbol) => (
+                <Button
+                  key={symbol}
+                  variant="currency"
+                  type="button"
+                  className="flex-1 cursor-pointer border-0 rounded-none bg-background"
+                  onClick={() => setCurrency(symbol)}
+                >
+                  {symbol}
+                </Button>
+              ))}
             </div>
           </div>
           <div className="md:col-span-2">
@@ -119,7 +83,7 @@ export const Calculator = () => {
               Initial investment:
             </label>
             <div className="flex">
-              <Button className="rounded-r-none w-12 hover:red" variant="neutral">{currency}</Button>
+              <Button className="rounded-r-none border-r-0 w-12 hover:red" type="button" variant="neutral">{currency}</Button>
               <Input
                 id="initialInvestment"
                 className="rounded-l-none"
