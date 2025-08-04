@@ -1,0 +1,7 @@
+approvedPackages:
+  - name: '@tailwindcss/oxide'
+    version: '4.1.11'
+  - name: 'sharp'
+    version: '0.34.3'          # ou veja com `pnpm why sharp`
+  - name: 'unrs-resolver'
+    version: '1.11.1'           # conforme o npm
