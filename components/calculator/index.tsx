@@ -1,12 +1,11 @@
 "use client";
 
 import { useMemo, FormEvent } from "react";
-import { calculateCompoundInterest } from "@/lib/compoundInterest";
+import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "ui";
 import { DepositTiming, Frequency, MovementType } from "@/types/frequency";
+import { calculateCompoundInterest } from "@/lib/compoundInterest";
 import { useCalculator } from "@/hooks/useCalculator";
 import Breakdown from "@/components/breakdown";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 
 export const Calculator = () => {
   const [state, dispatch] = useCalculator();
