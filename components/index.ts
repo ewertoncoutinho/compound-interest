@@ -1,2 +1,2 @@
-export { default as Calculator } from "./Calculator";
-export { default as Breakdown } from "./Breakdown";
+export { default as Calculator } from "./calculator";
+export { default as Breakdown } from "./breakdown";
