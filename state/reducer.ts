@@ -35,8 +35,8 @@ export function calculatorReducer(state: CalculatorState, action: CalculatorActi
       return { ...state, interestRateFrequency: action.payload };
     case "SET_MOVEMENT_TYPE":
       return { ...state, movementType: action.payload };
-    // case "SET_DEPOSIT_TIMING":
-    //   return { ...state, depositTiming: action.payload };
+    case "SET_DEPOSIT_TIMING":
+      return { ...state, depositTiming: action.payload };
     case "SET_YEARS":
       return { ...state, years: action.payload };
     case "SET_MONTHS":
