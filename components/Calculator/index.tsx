@@ -5,7 +5,8 @@ import { calculateCompoundInterest } from "@/lib/compoundInterest";
 import { DepositTiming, Frequency, MovementType } from "@/types/frequency";
 import { useCalculator } from "@/hooks/useCalculator";
 import Breakdown from "@/components/breakdown";
-import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 export default function Calculator() {
   const [state, dispatch] = useCalculator();
