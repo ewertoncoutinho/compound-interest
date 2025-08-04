@@ -9,7 +9,7 @@ export const initialState: CalculatorState = {
   interestRate: 5,
   interestRateFrequency: "anual",
   movementType: "none",
-  // depositTiming: "end",
+  depositTiming: "end",
   years: 5,
   months: 0,
   results: null,
