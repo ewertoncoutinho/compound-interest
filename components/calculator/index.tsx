@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, FormEvent } from "react";
-import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "ui";
+import { useMemo, FormEvent, useState } from "react";
+import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Button } from "ui";
 import { DepositTiming, Frequency, MovementType } from "@/types/frequency";
 import { calculateCompoundInterest } from "@/lib/compoundInterest";
 import { useCalculator } from "@/hooks/useCalculator";
@@ -9,6 +9,7 @@ import Breakdown from "@/components/breakdown";
 
 export const Calculator = () => {
   const [state, dispatch] = useCalculator();
+  const [currency, setCurrency] = useState("R$");
   const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
 
   const handleCalculate = (e: FormEvent<HTMLFormElement>) => {
@@ -45,7 +46,64 @@ export const Calculator = () => {
 
   return (
     <>
-      <form onSubmit={handleCalculate} className="gap-y-4 max-w-[360px]">
+      <form onSubmit={handleCalculate} className="flex flex-col gap-y-5 max-w-[360px] p-6 border rounded-md">
+        <div className="md:col-span-2">
+          <label
+            htmlFor="initialInvestment"
+            className="flex mb-1 text-sm font-medium text-neutral-400"
+          >
+            Currency:
+          </label>
+          <div className="flex">
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-r-none flex-1"
+              onClick={() => setCurrency("R$")}
+            >
+              R$
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-none flex-1"
+              onClick={() => setCurrency("$")}
+            >
+              $
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-none flex-1"
+              onClick={() => setCurrency("€")}
+            >
+              €
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-none flex-1"
+              onClick={() => setCurrency("£")}
+            >
+              £
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-none flex-1"
+              onClick={() => setCurrency("₹")}
+            >
+              ₹
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-none flex-1"
+              onClick={() => setCurrency("¥")}
+            >
+              ¥
+            </Button>
+            <Button
+              variant="outline"
+              className="cursor-pointer rounded-l-none flex-1"
+              onClick={() => setCurrency("")}
+            ></Button>
+          </div>
+        </div>
         <div className="md:col-span-2">
           <label
             htmlFor="initialInvestment"
@@ -53,12 +111,16 @@ export const Calculator = () => {
           >
             Initial investment:
           </label>
-          <Input
-            id="initialInvestment"
-            value={state.initialInvestment || ""}
-            placeholder="0"
-            onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
-          />
+          <div className="flex">
+            <Button className="rounded-r-none w-12 hover:red" variant="neutral">{currency}</Button>
+            <Input
+              id="initialInvestment"
+              className="rounded-l-none"
+              value={state.initialInvestment || ""}
+              placeholder="0"
+              onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
+            />
+          </div>
         </div>
 
         <div className="flex items-end gap-2">
@@ -69,12 +131,19 @@ export const Calculator = () => {
             >
               Interest rate:
             </label>
-            <Input
-              id="interestRate"
-              value={state.interestRate || ""}
-              placeholder="0"
-              onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
-            />
+            <div className="relative">
+              <Input
+                id="interestRate"
+                className="pr-6"
+                value={state.interestRate || ""}
+                placeholder="0"
+                onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
+              />
+              <span className="w-5 flex justify-center absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
+                %
+              </span>
+            </div>
+
           </div>
           <Select
             value={state.interestRateFrequency}
@@ -308,15 +377,13 @@ export const Calculator = () => {
             </div>
           </div>
         )}
-
-        <div className="mt-6">
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
-          >
-            Calculate
-          </button>
-        </div>
+        <Button
+          variant="default"
+          type="submit"
+          className="w-full cursor-pointer"
+        >
+          Calculate
+        </Button>
       </form>
       {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown} />}
     </>
