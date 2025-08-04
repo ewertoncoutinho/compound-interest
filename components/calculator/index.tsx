@@ -47,7 +47,7 @@ export const Calculator = () => {
 
   return (
     <>
-      <div className="mx-auto rounded-xl px-2 mt-2 max-w-[360px]">
+      <div className="mx-auto rounded-xl px-4 mt-4 max-w-[360px]">
         <div className="border border-b-0 rounded-t-sm h-10 flex items-center justify-center gap-2 text-neutral-300">
           <ChartColumn size={20} />
           <h1 className='text-md'>Compound Interest</h1>
@@ -64,7 +64,7 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-r-none flex-1"
+                className="cursor-pointer rounded-r-none border-r-0 flex-1"
                 onClick={() => setCurrency("R$")}
               >
                 R$
@@ -72,7 +72,7 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-none flex-1"
+                className="cursor-pointer rounded-none border-r-0 flex-1"
                 onClick={() => setCurrency("$")}
               >
                 $
@@ -80,7 +80,7 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-none flex-1"
+                className="cursor-pointer rounded-none border-r-0 flex-1"
                 onClick={() => setCurrency("€")}
               >
                 €
@@ -88,7 +88,7 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-none flex-1"
+                className="cursor-pointer rounded-none border-r-0 flex-1"
                 onClick={() => setCurrency("£")}
               >
                 £
@@ -96,7 +96,7 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-none flex-1"
+                className="cursor-pointer rounded-none border-r-0 flex-1"
                 onClick={() => setCurrency("₹")}
               >
                 ₹
@@ -104,17 +104,11 @@ export const Calculator = () => {
               <Button
                 variant="outline"
                 type="button"
-                className="cursor-pointer rounded-none flex-1"
+                className="cursor-pointer  rounded-l-none flex-1"
                 onClick={() => setCurrency("¥")}
               >
                 ¥
               </Button>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer rounded-l-none flex-1"
-                onClick={() => setCurrency("")}
-              ></Button>
             </div>
           </div>
           <div className="md:col-span-2">
