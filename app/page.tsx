@@ -10,9 +10,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Calculator/>
-      <footer className="text-center mt-8 text-neutral-500 text-xs">
-        <p>Criado com Next.js e Tailwind CSS. Baseado em TheCalculatorSite.com.</p>
-      </footer>
     </main>
   );
 }
