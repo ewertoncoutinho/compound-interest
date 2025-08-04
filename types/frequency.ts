@@ -1,6 +1,5 @@
 export type Frequency = "anual" | "trimestral" | "mensal" | "semanal" | "diaria";
 export type DepositTiming = "end" | "beginning";
-export type RateFrequency = "anual" | "mensal" | "semanal";
 export type MovementType = "none" | "deposits" | "withdrawals" | "both";
 
 export interface CalculationResult {

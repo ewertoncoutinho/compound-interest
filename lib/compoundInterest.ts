@@ -8,12 +8,6 @@ const frequencyMap: Record<Frequency, number> = {
   diaria: 365,
 };
 
-const rateFrequencyMap: Record<RateFrequency, number> = {
-  anual: 1,
-  mensal: 12,
-  semanal: 52,
-};
-
 export function calculateCompoundInterest(params: {
   initialInvestment: number;
   regularDeposit: number;
@@ -40,7 +34,7 @@ export function calculateCompoundInterest(params: {
   } = params;
 
   // Normalização da taxa para taxa anual
-  const normalizedAnnualRate = (interestRate / 100) * rateFrequencyMap[interestRateFrequency];
+  const normalizedAnnualRate = (interestRate / 100) * frequencyMap[interestRateFrequency];
   const compoundingsPerYear = frequencyMap[compoundFrequency];
   const periodicRate = normalizedAnnualRate / compoundingsPerYear;
   const totalPeriods = termInYears * compoundingsPerYear;

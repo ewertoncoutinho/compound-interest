@@ -2,7 +2,7 @@
 
 import { useMemo, FormEvent } from "react";
 import { calculateCompoundInterest } from "@/lib/compoundInterest";
-import { DepositTiming, Frequency, MovementType, RateFrequency } from "@/types/frequency";
+import { DepositTiming, Frequency, MovementType } from "@/types/frequency";
 import { useCalculator } from "@/hooks/useCalculator";
 import Breakdown from "@/components/breakdown";
 import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui";
@@ -80,16 +80,18 @@ export default function Calculator() {
           </div>
           <Select
             value={state.interestRateFrequency}
-            onValueChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e as RateFrequency })}
+            onValueChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e as Frequency })}
           >
             <SelectTrigger className="w-[280px]" id="interestRateFrequency">
               <SelectValue placeholder="Select a timezone" />
             </SelectTrigger>
             <SelectContent
             >
-              <SelectItem value="anual">Anual</SelectItem >
-              <SelectItem value="mensal">Mensal</SelectItem >
-              <SelectItem value="semanal">Semanal</SelectItem >
+              <SelectItem value="diaria">Daily</SelectItem>
+              <SelectItem value="semanal">Weekly</SelectItem>
+              <SelectItem value="mensal">Monthly</SelectItem>
+              <SelectItem value="trimestral">Quarterly</SelectItem>
+              <SelectItem value="anual">Annual</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -110,11 +112,11 @@ export default function Calculator() {
               <SelectValue placeholder="Select a timezone" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="anual">Yearly (1/yr)</SelectItem>
-              <SelectItem value="trimestral">Quarterly (4/yr)</SelectItem>
-              <SelectItem value="mensal">Monthly (12/yr)</SelectItem>
-              <SelectItem value="semanal">Weekly (52/yr)</SelectItem>
               <SelectItem value="diaria">Daily (365/yr)</SelectItem>
+              <SelectItem value="semanal">Weekly (52/yr)</SelectItem>
+              <SelectItem value="mensal">Monthly (12/yr)</SelectItem>
+              <SelectItem value="trimestral">Quarterly (4/yr)</SelectItem>
+              <SelectItem value="anual">Yearly (1/yr)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -313,7 +315,7 @@ export default function Calculator() {
             type="submit"
             className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
           >
-            Calcular
+            Calculate
           </button>
         </div>
       </form>
