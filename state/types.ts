@@ -1,4 +1,4 @@
-import { CalculationResult, DepositTiming, Frequency, MovementType, RateFrequency, YearlyBreakdown } from "@/types/frequency";
+import { CalculationResult, DepositTiming, Frequency, MovementType, YearlyBreakdown } from "@/types/frequency";
 
 export interface CalculatorState {
   initialInvestment: number;
@@ -7,7 +7,7 @@ export interface CalculatorState {
   depositFrequency: Frequency;
   compoundFrequency: Frequency;
   interestRate: number;
-  interestRateFrequency: RateFrequency;
+  interestRateFrequency: Frequency;
   movementType: MovementType;
   depositTiming: DepositTiming;
   years: number;
@@ -25,7 +25,7 @@ export type CalculatorAction =
   | SetAction<"SET_DEPOSIT_FREQUENCY", Frequency>
   | SetAction<"SET_COMPOUND_FREQUENCY", Frequency>
   | SetAction<"SET_INTEREST_RATE", number>
-  | SetAction<"SET_INTEREST_RATE_FREQUENCY", RateFrequency>
+  | SetAction<"SET_INTEREST_RATE_FREQUENCY", Frequency>
   | SetAction<"SET_MOVEMENT_TYPE", MovementType>
   | SetAction<"SET_DEPOSIT_TIMING", DepositTiming>
   | SetAction<"SET_YEARS", number>
