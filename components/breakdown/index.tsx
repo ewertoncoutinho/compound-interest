@@ -10,8 +10,6 @@ interface BreakdownProps {
 }
 
 export const Breakdown = ({ initialInvestment, results, breakdown, years }: BreakdownProps) => {
-    console.log("🚀 ~ Breakdown ~ breakdown:", breakdown)
-    console.log("🚀 ~ Breakdown ~ initialInvestment:", initialInvestment)
     return (
         <div className="flex flex-col gap-1 my-10">
             <div className="flex flex-col gap-4">
@@ -38,70 +36,63 @@ export const Breakdown = ({ initialInvestment, results, breakdown, years }: Brea
                     </p>
                 </div>
             </div>
-            {/* <div className="mt-10 overflow-x-auto">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                    Detalhamento
+            <div className="mt-10 overflow-x-auto">
+                <h3 className="text-xl mb-4">
+                    Yearly breakdown
                 </h3>
+                <Separator />
                 <table className="min-w-full border border-gray-200">
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Ano
+                                Year
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Depósitos
+                                Interest
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Juros Ganhos
+                                Accrued
+                                Interest
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Juros Acumulado
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Saldo Final
+                                Balance
                             </th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         <tr className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 0
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700 font-semibold">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                                 -
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 -
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                -
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 font-bold">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">
                                 {formatCurrency(initialInvestment)}
                             </td>
                         </tr>
                         {breakdown.map((item) => (
                             <tr key={item.year} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     {item.year}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                    {formatCurrency(item.deposits)}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700 font-semibold">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                                     {formatCurrency(item.interest)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700 font-semibold">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                                     {formatCurrency(item.endBalance - initialInvestment)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 font-bold">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">
                                     {formatCurrency(item.endBalance)}
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div> */}
+            </div>
         </div>
     )
 }
