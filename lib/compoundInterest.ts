@@ -61,8 +61,8 @@ export function calculateCompoundInterest(params: {
   const finalBalance = futureValueInitial + futureValueAnnuity;
 
   const breakdown: YearlyBreakdown[] = [];
+  const totalDeposits = 0;
   let currentBalance = initialInvestmentAmount;
-  let totalDeposits = 0;
 
   for (let year = 1; year <= termInYears; year++) {
     const startBalance = currentBalance;
