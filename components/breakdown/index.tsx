@@ -28,13 +28,13 @@ export const Breakdown = ({ initialInvestment, results, breakdown, years }: Brea
                 <div>
                     <p className="text-sm">Total interest earned</p>
                     <p className="text-2xl text-orange-400">
-                        {formatCurrency(results?.totalPrincipal)}
+                        {formatCurrency(results?.totalInterest)}
                     </p>
                 </div>
                 <div>
                     <p className="text-sm">Initial balance</p>
                     <p className="text-2xl text-blue-400">
-                        {formatCurrency(results?.totalInterest)}
+                        {formatCurrency(results?.totalPrincipal)}
                     </p>
                 </div>
             </div>
