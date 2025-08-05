@@ -33,7 +33,6 @@ export function calculateCompoundInterest(params: {
     // depositTiming,
   } = params;
 
-  // Normalização da taxa para taxa anual
   const normalizedAnnualRate = (interestRate / 100) * frequencyMap[interestRateFrequency];
   const compoundingsPerYear = frequencyMap[compoundFrequency];
   const periodicRate = normalizedAnnualRate / compoundingsPerYear;
@@ -61,27 +60,42 @@ export function calculateCompoundInterest(params: {
 
   const finalBalance = futureValueInitial + futureValueAnnuity;
 
-  // Detalhamento anual
   const breakdown: YearlyBreakdown[] = [];
   let currentBalance = initialInvestmentAmount;
   let totalDeposits = 0;
 
   for (let year = 1; year <= termInYears; year++) {
     const startBalance = currentBalance;
-    const depositsThisYear = regularDepositAmount * frequencyMap[depositFrequency];
-    const withdrawalsThisYear = regularWithdrawalAmount * frequencyMap[depositFrequency];
-    const netMovementsThisYear = depositsThisYear - withdrawalsThisYear;
+    let interestThisYear = 0;
+    let depositsThisYear = 0;
+    let withdrawalsThisYear = 0;
 
-    totalDeposits += netMovementsThisYear;
+    for (let period = 0; period < compoundingsPerYear; period++) {
+      const isDepositPeriod = (period % Math.floor(compoundingsPerYear / frequencyMap[depositFrequency]) === 0);
 
-    const endBalanceThisYear = (startBalance + netMovementsThisYear) * Math.pow(1 + normalizedAnnualRate, 1);
-    const interestThisYear = endBalanceThisYear - (startBalance + netMovementsThisYear);
-    currentBalance = endBalanceThisYear;
+      if (movementType === "deposits" || movementType === "both") {
+        if (isDepositPeriod) {
+          currentBalance += regularDepositAmount;
+          depositsThisYear += regularDepositAmount;
+        }
+      }
+
+      if (movementType === "withdrawals" || movementType === "both") {
+        if (isDepositPeriod) {
+          currentBalance -= regularWithdrawalAmount;
+          withdrawalsThisYear += regularWithdrawalAmount;
+        }
+      }
+
+      const interestThisPeriod = currentBalance * periodicRate;
+      currentBalance += interestThisPeriod;
+      interestThisYear += interestThisPeriod;
+    }
 
     breakdown.push({
       year,
       startingBalance: startBalance,
-      deposits: netMovementsThisYear,
+      deposits: depositsThisYear - withdrawalsThisYear,
       interest: interestThisYear,
       endBalance: currentBalance,
     });
