@@ -186,7 +186,7 @@ export const Calculator = () => {
           <div>
             <div>
               <label htmlFor="state.movementType" className="flex mb-2 text-sm font-medium text-neutral-400">
-                Tipo de Movimentação
+                Additional contributions
               </label>
               <Select
                 value={state.movementType}
@@ -197,7 +197,7 @@ export const Calculator = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Nenhuma</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
                   <SelectItem value="deposits">Apenas Depósitos</SelectItem>
                   <SelectItem value="withdrawals">Apenas Retiradas</SelectItem>
                   <SelectItem value="both">Depósitos e Retiradas</SelectItem>
