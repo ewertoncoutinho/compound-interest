@@ -59,7 +59,7 @@ export const Calculator = () => {
               htmlFor="initialInvestment"
               className="flex mb-1 text-sm font-medium text-neutral-400"
             >
-              Currency:
+              Currency
             </label>
             <div className="flex border dark:border-input rounded-md overflow-hidden">
               {currencies.map((symbol) => (
@@ -67,7 +67,7 @@ export const Calculator = () => {
                   key={symbol}
                   variant="currency"
                   type="button"
-                  className="flex-1 cursor-pointer border-0 rounded-none bg-background"
+                  className="flex-1 cursor-pointer border-0 rounded-none bg-background not-first:border-l not-first:border-muted"
                   onClick={() => setCurrency(symbol)}
                 >
                   {symbol}
@@ -80,7 +80,7 @@ export const Calculator = () => {
               htmlFor="initialInvestment"
               className="flex mb-1 text-sm font-medium text-neutral-400"
             >
-              Initial investment:
+              Initial investment
             </label>
             <div className="flex">
               <Button className="rounded-r-none border-r-0 w-12 hover:red" type="button" variant="neutral">{currency}</Button>
@@ -100,7 +100,7 @@ export const Calculator = () => {
                 htmlFor="interestRate"
                 className="flex mb-1 text-sm font-medium text-neutral-400"
               >
-                Interest rate:
+                Interest rate
               </label>
               <div className="relative">
                 <Input
@@ -138,7 +138,7 @@ export const Calculator = () => {
               id="compoundFrequency"
               className="flex mb-2 text-sm font-medium text-neutral-400"
             >
-              Compound frequency:
+              Compound frequency
             </label>
             <Select
               aria-labelledby="compoundFrequency"
@@ -161,7 +161,7 @@ export const Calculator = () => {
           <div className="flex gap-2">
             <div>
               <label className="flex mb-2 text-sm font-medium text-neutral-400">
-                Years:
+                Years
               </label>
               <Input
                 id="years"
@@ -172,7 +172,7 @@ export const Calculator = () => {
             </div>
             <div>
               <label className="flex mb-2 text-sm font-medium text-neutral-400">
-                Months:
+                Months
               </label>
               <Input
                 id="months"
@@ -356,7 +356,7 @@ export const Calculator = () => {
             Calculate
           </Button>
         </form>
-        {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown} />}
+        {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown} years={state.years} />}
       </div>
     </>
   );
