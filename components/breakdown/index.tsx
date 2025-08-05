@@ -10,6 +10,8 @@ interface BreakdownProps {
 }
 
 export const Breakdown = ({ initialInvestment, results, breakdown, years }: BreakdownProps) => {
+    console.log("🚀 ~ Breakdown ~ breakdown:", breakdown)
+    console.log("🚀 ~ Breakdown ~ initialInvestment:", initialInvestment)
     return (
         <div className="flex flex-col gap-1 my-10">
             <div className="flex flex-col gap-4">
