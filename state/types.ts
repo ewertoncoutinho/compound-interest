@@ -1,6 +1,7 @@
 import { CalculationResult, DepositTiming, Frequency, MovementType, YearlyBreakdown } from "@/types/frequency";
 
 export interface CalculatorState {
+  currency: string;
   initialInvestment: number;
   regularDeposit: number;
   regularWithdrawal: number;
@@ -19,6 +20,7 @@ export interface CalculatorState {
 type SetAction<T extends string, P> = { type: T; payload: P };
 
 export type CalculatorAction =
+  | SetAction<"SET_CURRENCY", string>
   | SetAction<"SET_INITIAL_INVESTMENT", number>
   | SetAction<"SET_REGULAR_DEPOSIT", number>
   | SetAction<"SET_REGULAR_WITHDRAWAL", number>
