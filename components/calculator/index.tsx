@@ -1,8 +1,16 @@
 "use client";
 
-import { useMemo, FormEvent, useState } from "react";
+import { useMemo, FormEvent } from "react";
 import { ChartColumn } from "lucide-react";
-import { Input, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Button } from "ui";
+import {
+  Input,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Button,
+} from "ui";
 import { DepositTiming, Frequency, MovementType } from "@/types/frequency";
 import { calculateCompoundInterest } from "@/lib/compoundInterest";
 import { useCalculator } from "@/hooks/useCalculator";
@@ -10,9 +18,11 @@ import Breakdown from "@/components/breakdown";
 
 export const Calculator = () => {
   const [state, dispatch] = useCalculator();
-  const [currency, setCurrency] = useState("R$");
   const currencies = ["R$", "$", "€", "£", "₹", "¥"];
-  const termInYears = useMemo(() => state.years + state.months / 12, [state.years, state.months]);
+  const termInYears = useMemo(
+    () => state.years + state.months / 12,
+    [state.years, state.months]
+  );
 
   const handleCalculate = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,13 +57,16 @@ export const Calculator = () => {
   };
 
   return (
-    <>
-      <div className="mx-auto rounded-xl px-4 mt-6 md:max-w-[360px]">
-        <div className="border border-b-0 rounded-t-sm h-10 flex items-center justify-center gap-2 text-neutral-300">
+    <div className="container mx-auto pt-6 px-4 flex flex-col lg:pt-20 lg:flex-row gap-8 min-h-screen">
+      <div className="w-full lg:max-w-[360px] lg:sticky lg:top-20 self-start">
+        <div className="rounded-t-sm h-10 flex items-center justify-center gap-2 text-neutral-300 lg:border lg:border-b-0">
           <ChartColumn size={20} />
-          <h1 className='text-md'>Compound Interest</h1>
+          <h1 className="text-md">Compound Interest</h1>
         </div>
-        <form onSubmit={handleCalculate} className="flex flex-col gap-y-5 p-4 border rounded-b-md">
+        <form
+          onSubmit={handleCalculate}
+          className="flex flex-col gap-y-5 rounded-b-md lg:border lg:p-4"
+        >
           <div className="md:col-span-2">
             <label
               htmlFor="initialInvestment"
@@ -68,7 +81,12 @@ export const Calculator = () => {
                   variant="currency"
                   type="button"
                   className="flex-1 cursor-pointer border-0 rounded-none bg-background not-first:border-l not-first:border-muted"
-                  onClick={() => setCurrency(symbol)}
+                  onClick={() =>
+                    dispatch({
+                      type: "SET_CURRENCY",
+                      payload: symbol,
+                    })
+                  }
                 >
                   {symbol}
                 </Button>
@@ -83,13 +101,24 @@ export const Calculator = () => {
               Initial investment
             </label>
             <div className="flex">
-              <Button className="rounded-r-none border-r-0 w-12 hover:red" type="button" variant="neutral">{currency}</Button>
+              <Button
+                className="rounded-r-none border-r-0 w-12 hover:red"
+                type="button"
+                variant="neutral"
+              >
+                {state.currency}
+              </Button>
               <Input
                 id="initialInvestment"
                 className="rounded-l-none"
                 value={state.initialInvestment || ""}
                 placeholder="0"
-                onChange={(e) => dispatch({ type: "SET_INITIAL_INVESTMENT", payload: Number(e.target.value) })}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_INITIAL_INVESTMENT",
+                    payload: Number(e.target.value),
+                  })
+                }
               />
             </div>
           </div>
@@ -108,23 +137,31 @@ export const Calculator = () => {
                   className="pr-6"
                   value={state.interestRate || ""}
                   placeholder="0"
-                  onChange={(e) => dispatch({ type: "SET_INTEREST_RATE", payload: Number(e.target.value) })}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_INTEREST_RATE",
+                      payload: Number(e.target.value),
+                    })
+                  }
                 />
                 <span className="w-5 flex justify-center absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
                   %
                 </span>
               </div>
-
             </div>
             <Select
               value={state.interestRateFrequency}
-              onValueChange={(e) => dispatch({ type: "SET_INTEREST_RATE_FREQUENCY", payload: e as Frequency })}
+              onValueChange={(e) =>
+                dispatch({
+                  type: "SET_INTEREST_RATE_FREQUENCY",
+                  payload: e as Frequency,
+                })
+              }
             >
               <SelectTrigger className="w-[280px]" id="interestRateFrequency">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent
-              >
+              <SelectContent>
                 <SelectItem value="diaria">Daily</SelectItem>
                 <SelectItem value="semanal">Weekly</SelectItem>
                 <SelectItem value="mensal">Monthly</SelectItem>
@@ -143,8 +180,12 @@ export const Calculator = () => {
             <Select
               aria-labelledby="compoundFrequency"
               value={state.compoundFrequency}
-              onValueChange={(e) => dispatch({ type: "SET_COMPOUND_FREQUENCY", payload: e as Frequency })}
-
+              onValueChange={(e) =>
+                dispatch({
+                  type: "SET_COMPOUND_FREQUENCY",
+                  payload: e as Frequency,
+                })
+              }
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -167,7 +208,12 @@ export const Calculator = () => {
                 id="years"
                 value={state.years || ""}
                 placeholder="0"
-                onChange={(e) => dispatch({ type: "SET_YEARS", payload: Number(e.target.value) })}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_YEARS",
+                    payload: Number(e.target.value),
+                  })
+                }
               />
             </div>
             <div>
@@ -178,19 +224,32 @@ export const Calculator = () => {
                 id="months"
                 value={state.months || ""}
                 placeholder="0"
-                onChange={(e) => dispatch({ type: "SET_MONTHS", payload: Number(e.target.value) })}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_MONTHS",
+                    payload: Number(e.target.value),
+                  })
+                }
               />
             </div>
           </div>
 
           <div>
             <div>
-              <label htmlFor="state.movementType" className="flex mb-2 text-sm font-medium text-neutral-400">
+              <label
+                htmlFor="state.movementType"
+                className="flex mb-2 text-sm font-medium text-neutral-400"
+              >
                 Additional contributions
               </label>
               <Select
                 value={state.movementType}
-                onValueChange={(e) => dispatch({ type: "SET_MOVEMENT_TYPE", payload: e as MovementType })}
+                onValueChange={(e) =>
+                  dispatch({
+                    type: "SET_MOVEMENT_TYPE",
+                    payload: e as MovementType,
+                  })
+                }
                 disabled
               >
                 <SelectTrigger className="w-full">
@@ -205,37 +264,55 @@ export const Calculator = () => {
               </Select>
             </div>
 
-            {(state.movementType === "deposits" || state.movementType === "both") && (
+            {(state.movementType === "deposits" ||
+              state.movementType === "both") && (
               <div className="mt-4">
-                <label htmlFor="regularDeposit" className="block text-sm font-medium text-neutral-400">
+                <label
+                  htmlFor="regularDeposit"
+                  className="block text-sm font-medium text-neutral-400"
+                >
                   Depósito Regular (R$)
                 </label>
                 <input
                   type="number"
                   id="regularDeposit"
                   value={state.regularDeposit}
-                  onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_REGULAR_DEPOSIT",
+                      payload: Number(e.target.value),
+                    })
+                  }
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             )}
 
-            {(state.movementType === "withdrawals" || state.movementType === "both") && (
+            {(state.movementType === "withdrawals" ||
+              state.movementType === "both") && (
               <div className="mt-4">
-                <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-neutral-400">
+                <label
+                  htmlFor="regularWithdrawal"
+                  className="block text-sm font-medium text-neutral-400"
+                >
                   Retirada Regular (R$)
                 </label>
                 <input
                   type="number"
                   id="regularWithdrawal"
                   value={state.regularWithdrawal}
-                  onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_REGULAR_WITHDRAWAL",
+                      payload: Number(e.target.value),
+                    })
+                  }
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             )}
 
-            {(state.movementType !== "none") && (
+            {state.movementType !== "none" && (
               <div>
                 <div>
                   <label
@@ -247,7 +324,12 @@ export const Calculator = () => {
                   <select
                     id="depositFrequency"
                     value={state.depositFrequency}
-                    onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "SET_DEPOSIT_FREQUENCY",
+                        payload: e.target.value as Frequency,
+                      })
+                    }
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="anual">Anual</option>
@@ -266,7 +348,12 @@ export const Calculator = () => {
                   <select
                     id="depositTiming"
                     value={state.depositTiming}
-                    onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "SET_DEPOSIT_TIMING",
+                        payload: e.target.value as DepositTiming,
+                      })
+                    }
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="end">Final do Período</option>
@@ -277,38 +364,55 @@ export const Calculator = () => {
             )}
           </div>
 
-
-          {(state.movementType === "deposits" || state.movementType === "both") && (
+          {(state.movementType === "deposits" ||
+            state.movementType === "both") && (
             <div className="mt-4">
-              <label htmlFor="regularDeposit" className="block text-sm font-medium text-neutral-400">
+              <label
+                htmlFor="regularDeposit"
+                className="block text-sm font-medium text-neutral-400"
+              >
                 Depósito Regular (R$)
               </label>
               <input
                 type="number"
                 id="regularDeposit"
                 value={state.regularDeposit}
-                onChange={(e) => dispatch({ type: "SET_REGULAR_DEPOSIT", payload: Number(e.target.value) })}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_REGULAR_DEPOSIT",
+                    payload: Number(e.target.value),
+                  })
+                }
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           )}
 
-          {(state.movementType === "withdrawals" || state.movementType === "both") && (
+          {(state.movementType === "withdrawals" ||
+            state.movementType === "both") && (
             <div className="mt-4">
-              <label htmlFor="regularWithdrawal" className="block text-sm font-medium text-neutral-400">
+              <label
+                htmlFor="regularWithdrawal"
+                className="block text-sm font-medium text-neutral-400"
+              >
                 Retirada Regular (R$)
               </label>
               <input
                 type="number"
                 id="regularWithdrawal"
                 value={state.regularWithdrawal}
-                onChange={(e) => dispatch({ type: "SET_REGULAR_WITHDRAWAL", payload: Number(e.target.value) })}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_REGULAR_WITHDRAWAL",
+                    payload: Number(e.target.value),
+                  })
+                }
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           )}
 
-          {(state.movementType !== "none") && (
+          {state.movementType !== "none" && (
             <div>
               <div>
                 <label
@@ -320,7 +424,12 @@ export const Calculator = () => {
                 <select
                   id="depositFrequency"
                   value={state.depositFrequency}
-                  onChange={(e) => dispatch({ type: "SET_DEPOSIT_FREQUENCY", payload: e.target.value as Frequency })}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_DEPOSIT_FREQUENCY",
+                      payload: e.target.value as Frequency,
+                    })
+                  }
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="anual">Anual</option>
@@ -339,7 +448,12 @@ export const Calculator = () => {
                 <select
                   id="depositTiming"
                   value={state.depositTiming}
-                  onChange={(e) => dispatch({ type: "SET_DEPOSIT_TIMING", payload: e.target.value as DepositTiming })}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_DEPOSIT_TIMING",
+                      payload: e.target.value as DepositTiming,
+                    })
+                  }
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="end">Final do Período</option>
@@ -356,10 +470,12 @@ export const Calculator = () => {
             Calculate
           </Button>
         </form>
-        {state.results && <Breakdown initialInvestment={state.initialInvestment} results={state.results} breakdown={state.breakdown} years={state.years} />}
       </div>
-    </>
+      <div className="flex-1">
+        <Breakdown data={state} />
+      </div>
+    </div>
   );
-}
+};
 
 export default Calculator;

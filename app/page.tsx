@@ -3,7 +3,7 @@ import { Calculator } from '@/components/calculator';
 
 export default function Home() {
   return (
-    <main className="container mx-auto">
+    <main>
       <Head>
         <title>Compound Interest Calculator</title>
         <meta name="description" content="Uma calculadora de juros compostos avançada criada com Next.js" />
