@@ -1,4 +1,3 @@
-import { useCalculator } from "@/hooks/useCalculator";
 import { formatCurrency } from "@/lib/formatters";
 import { CalculatorState } from "@/state/types";
 import {
@@ -16,7 +15,6 @@ interface BreakdownProps {
 }
 
 export const Breakdown = ({ data }: BreakdownProps) => {
-  console.log("🚀 ~ Breakdown ~ data:", data)
   const YEARS = data.breakdown.at(-1)?.year ?? null;
   return (
     <div className="flex flex-col gap-1">
