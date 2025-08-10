@@ -1,4 +1,4 @@
-import { CalculationResult, DepositTiming, Frequency, MovementType, YearlyBreakdown } from "@/types/frequency";
+import { Breakdown, CalculationResult, DepositTiming, Frequency, MovementType } from "@/types/frequency";
 
 export interface CalculatorState {
   currency: string;
@@ -14,7 +14,7 @@ export interface CalculatorState {
   years: number;
   months: number;
   results: CalculationResult | null;
-  breakdown: YearlyBreakdown[];
+  breakdown: Breakdown[];
 }
 
 type SetAction<T extends string, P> = { type: T; payload: P };
@@ -33,4 +33,4 @@ export type CalculatorAction =
   | SetAction<"SET_YEARS", number>
   | SetAction<"SET_MONTHS", number>
   | SetAction<"SET_RESULTS", CalculationResult | null>
-  | SetAction<"SET_BREAKDOWN", YearlyBreakdown[]>;
+  | SetAction<"SET_BREAKDOWN", Breakdown[]>;

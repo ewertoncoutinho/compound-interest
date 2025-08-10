@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/lib/formatters";
+import { formatCurrency, formatMonthsToYearsMonths } from "@/lib/formatters";
 import { CalculatorState } from "@/state/types";
 import {
   Separator,
@@ -15,11 +15,11 @@ interface BreakdownProps {
 }
 
 export const Breakdown = ({ data }: BreakdownProps) => {
-  const YEARS = data.breakdown.at(-1)?.year ?? null;
+    const YEARS = data.breakdown.at(-1)?.month ?? 0;
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-col gap-4">
-        <h2 className="text-xl">Calculation for {YEARS} years</h2>
+        <h2 className="text-xl">Calculation for {formatMonthsToYearsMonths(YEARS)}</h2>
         <Separator />
         <div>
           <p className="text-sm">Future investment value</p>
@@ -41,25 +41,25 @@ export const Breakdown = ({ data }: BreakdownProps) => {
         </div>
       </div>
       <div className="my-8 border p-8 rounded-md">
-        <h3 className="text-xl mb-4">Yearly breakdown</h3>
+        <h3 className="text-xl mb-4">Breakdown</h3>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-20">Year</TableHead>
+              <TableHead className="w-20 text-center">Month</TableHead>
               <TableHead className="w-40">Interest</TableHead>
               <TableHead className="w-40">Accrued Interest</TableHead>
-              <TableHead className="w-40 text-right">Balance</TableHead>
+              <TableHead className="w-40">Balance</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {data.breakdown.map((item) => (
-              <TableRow key={item.year}>
-                <TableCell>{item.year}</TableCell>
+              <TableRow key={item.month}>
+                <TableCell className="text-center">{item.month}</TableCell>
                 <TableCell>{formatCurrency(item.interest, data.currency)}</TableCell>
                 <TableCell>
                   {formatCurrency(item.endBalance - data.initialInvestment, data.currency)}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell>
                   {formatCurrency(item.endBalance, data.currency)}
                 </TableCell>
               </TableRow>

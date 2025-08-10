@@ -2,64 +2,126 @@ import { CalculatorState, CalculatorAction } from "@/state/types";
 
 export const initialState: CalculatorState = {
   currency: 'R$',
-  initialInvestment: 5000,
+  initialInvestment: 1000,
   regularDeposit: 0,
   regularWithdrawal: 0,
-  depositFrequency: "mensal",
-  compoundFrequency: "mensal",
-  interestRate: 5,
-  interestRateFrequency: "anual",
+  depositFrequency: "monthly",
+  compoundFrequency: "monthly",
+  interestRate: 10,
+  interestRateFrequency: "monthly",
   movementType: "none",
   depositTiming: "end",
-  years: 5,
+  years: 1,
   months: 0,
   results: {
-    "finalBalance": 6416.79,
-    "totalPrincipal": 5000,
-    "totalInterest": 1416.79
+    "finalBalance": 75191.10,
+    "totalPrincipal": 1000,
+    "totalInterest": 74191.10
   },
   breakdown: [
     {
-      "year": 0,
+      "month": 0,
+      "withdrawals": 0,
       "startingBalance": 0,
       "deposits": 0,
       "interest": 0,
-      "endBalance": 5000
+      "endBalance": 1000
     },
     {
-      "year": 1,
-      "startingBalance": 5000,
+      "month": 1,
+      "startingBalance": 1000,
       "deposits": 0,
-      "interest": 255.81,
-      "endBalance": 5255.81
+      "withdrawals": 0,
+      "interest": 433.33333333333337,
+      "endBalance": 1433.3333333333335
     },
     {
-      "year": 2,
-      "startingBalance": 5255.81,
+      "month": 2,
+      "startingBalance": 1433.3333333333335,
       "deposits": 0,
-      "interest": 268.90,
-      "endBalance": 5524.71
+      "withdrawals": 0,
+      "interest": 621.1111111111112,
+      "endBalance": 2054.444444444445
     },
     {
-      "year": 3,
-      "startingBalance": 5524.71,
+      "month": 3,
+      "startingBalance": 2054.444444444445,
       "deposits": 0,
-      "interest": 282.65,
-      "endBalance": 5807.36
+      "withdrawals": 0,
+      "interest": 890.2592592592595,
+      "endBalance": 2944.7037037037044
     },
     {
-      "year": 4,
-      "startingBalance": 5807.36,
+      "month": 4,
+      "startingBalance": 2944.7037037037044,
       "deposits": 0,
-      "interest": 297.12,
-      "endBalance": 6104.48
+      "withdrawals": 0,
+      "interest": 1276.0382716049387,
+      "endBalance": 4220.741975308643
     },
     {
-      "year": 5,
-      "startingBalance": 6104.48,
+      "month": 5,
+      "startingBalance": 4220.741975308643,
       "deposits": 0,
-      "interest": 312.32,
-      "endBalance": 6416.79
+      "withdrawals": 0,
+      "interest": 1828.9881893004122,
+      "endBalance": 6049.7301646090555
+    },
+    {
+      "month": 6,
+      "startingBalance": 6049.7301646090555,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 2621.5497379972576,
+      "endBalance": 8671.279902606313
+    },
+    {
+      "month": 7,
+      "startingBalance": 8671.279902606313,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 3757.554624462736,
+      "endBalance": 12428.834527069048
+    },
+    {
+      "month": 8,
+      "startingBalance": 12428.834527069048,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 5385.828295063255,
+      "endBalance": 17814.662822132304
+    },
+    {
+      "month": 9,
+      "startingBalance": 17814.662822132304,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 7719.687222923999,
+      "endBalance": 25534.350045056304
+    },
+    {
+      "month": 10,
+      "startingBalance": 25534.350045056304,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 11064.8850195244,
+      "endBalance": 36599.2350645807
+    },
+    {
+      "month": 11,
+      "startingBalance": 36599.2350645807,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 15859.668527984972,
+      "endBalance": 52458.90359256567
+    },
+    {
+      "month": 12,
+      "startingBalance": 52458.90359256567,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 22732.19155677846,
+      "endBalance": 75191.09514934412
     }
   ],
 };

@@ -1,11 +1,17 @@
-import { MovementType, Frequency, CalculationResult, YearlyBreakdown, DepositTiming } from "@/types/frequency";
+import {
+  MovementType,
+  Frequency,
+  CalculationResult,
+  DepositTiming,
+  Breakdown,
+} from "@/types/frequency";
 
 const frequencyMap: Record<Frequency, number> = {
-  anual: 1,
-  trimestral: 4,
-  mensal: 12,
-  semanal: 52,
-  diaria: 365,
+  annual: 1,
+  quarterly: 4,
+  monthly: 12,
+  weekly: 52,
+  daily: 360,
 };
 
 export function calculateCompoundInterest(params: {
@@ -19,7 +25,7 @@ export function calculateCompoundInterest(params: {
   termInYears: number;
   movementType: MovementType;
   depositTiming: DepositTiming;
-}): { result: CalculationResult; breakdown: YearlyBreakdown[] } {
+}): { result: CalculationResult; breakdown: Breakdown[] } {
   const {
     initialInvestment,
     regularDeposit,
@@ -30,91 +36,79 @@ export function calculateCompoundInterest(params: {
     interestRateFrequency,
     termInYears,
     movementType,
-    // depositTiming,
   } = params;
 
-  const normalizedAnnualRate = (interestRate / 100) * frequencyMap[interestRateFrequency];
-  const compoundingsPerYear = frequencyMap[compoundFrequency];
-  const periodicRate = normalizedAnnualRate / compoundingsPerYear;
-  const totalPeriods = termInYears * compoundingsPerYear;
+  const monthsInYear = 360;
+  const totalMonths = Math.floor(termInYears * monthsInYear);
 
-  const initialInvestmentAmount = initialInvestment || 0;
-  const regularDepositAmount = regularDeposit || 0;
-  const regularWithdrawalAmount = regularWithdrawal || 0;
+  const compoundFreqMonthsRaw = monthsInYear / frequencyMap[compoundFrequency];
+  const compoundFreqMonths = compoundFreqMonthsRaw < 1 ? 1 : Math.round(compoundFreqMonthsRaw);
 
-  const futureValueInitial = initialInvestmentAmount * Math.pow(1 + periodicRate, totalPeriods);
+  const depositFreqMonthsRaw = monthsInYear / frequencyMap[depositFrequency];
+  const depositFreqMonths = depositFreqMonthsRaw < 1 ? 1 : Math.round(depositFreqMonthsRaw);
 
-  let futureValueAnnuity = 0;
 
-  if (movementType === "deposits" || movementType === "both") {
-    const depositsPerYear = frequencyMap[depositFrequency];
-    const depositsPerPeriod = Math.floor(totalPeriods * (depositsPerYear / compoundingsPerYear));
-    futureValueAnnuity += regularDepositAmount * ((Math.pow(1 + periodicRate, depositsPerPeriod) - 1) / periodicRate);
-  }
+  const annualRate = (interestRate / 100) * frequencyMap[interestRateFrequency];
+  const periodicRate = annualRate / frequencyMap[compoundFrequency];
 
-  if (movementType === "withdrawals" || movementType === "both") {
-    const withdrawalsPerYear = frequencyMap[depositFrequency];
-    const withdrawalsPerPeriod = Math.floor(totalPeriods * (withdrawalsPerYear / compoundingsPerYear));
-    futureValueAnnuity -= regularWithdrawalAmount * ((Math.pow(1 + periodicRate, withdrawalsPerPeriod) - 1) / periodicRate);
-  }
-
-  const finalBalance = futureValueInitial + futureValueAnnuity;
-  const breakdown: YearlyBreakdown[] = [
+  let currentBalance = initialInvestment || 0;
+  let totalDeposits = 0;
+  let totalWithdrawals = 0;
+  const breakdown: Breakdown[] = [
     {
-      "year": 0,
+      "month": 0,
+      "withdrawals": 0,
       "startingBalance": 0,
       "deposits": 0,
       "interest": 0,
       "endBalance": initialInvestment
     },
   ];
-  const totalDeposits = 0;
-  let currentBalance = initialInvestmentAmount;
 
-  for (let year = 1; year <= termInYears; year++) {
-    const startBalance = currentBalance;
-    let interestThisYear = 0;
-    let depositsThisYear = 0;
-    let withdrawalsThisYear = 0;
+  for (let month = 1; month <= totalMonths; month++) {
+    const startingBalance = currentBalance;
+    let depositsThisMonth = 0;
+    let withdrawalsThisMonth = 0;
+    let interestThisMonth = 0;
 
-    for (let period = 0; period < compoundingsPerYear; period++) {
-      const isDepositPeriod = (period % Math.floor(compoundingsPerYear / frequencyMap[depositFrequency]) === 0);
-
+    if ((month - 1) % depositFreqMonths === 0) {
       if (movementType === "deposits" || movementType === "both") {
-        if (isDepositPeriod) {
-          currentBalance += regularDepositAmount;
-          depositsThisYear += regularDepositAmount;
-        }
+        currentBalance += regularDeposit;
+        depositsThisMonth = regularDeposit;
+        totalDeposits += regularDeposit;
       }
-
       if (movementType === "withdrawals" || movementType === "both") {
-        if (isDepositPeriod) {
-          currentBalance -= regularWithdrawalAmount;
-          withdrawalsThisYear += regularWithdrawalAmount;
-        }
+        currentBalance -= regularWithdrawal;
+        withdrawalsThisMonth = regularWithdrawal;
+        totalWithdrawals += regularWithdrawal;
       }
-
-      const interestThisPeriod = currentBalance * periodicRate;
-      currentBalance += interestThisPeriod;
-      interestThisYear += interestThisPeriod;
     }
 
-    breakdown.push({
-      year,
-      startingBalance: startBalance,
-      deposits: depositsThisYear - withdrawalsThisYear,
-      interest: interestThisYear,
-      endBalance: currentBalance,
-    });
-  }
+    if ((month - 1) % compoundFreqMonths === 0) {
+      interestThisMonth = currentBalance * periodicRate;
+      currentBalance += interestThisMonth;
+    }
 
-  const totalPrincipal = initialInvestmentAmount + totalDeposits;
+    if (month % 30 === 0) {
+      breakdown.push({
+        month: month / 30,
+        startingBalance,
+        deposits: depositsThisMonth,
+        withdrawals: withdrawalsThisMonth,
+        interest: interestThisMonth,
+        endBalance: currentBalance,
+      });
+    }
+  }
+  
+  console.log("🚀 ~ calculateCompoundInterest ~ breakdown:", breakdown)
+  const totalPrincipal = initialInvestment + totalDeposits - totalWithdrawals;
 
   return {
     result: {
-      finalBalance,
+      finalBalance: currentBalance,
       totalPrincipal,
-      totalInterest: finalBalance - totalPrincipal,
+      totalInterest: currentBalance - totalPrincipal,
     },
     breakdown,
   };

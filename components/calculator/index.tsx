@@ -162,11 +162,11 @@ export const Calculator = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="diaria">Daily</SelectItem>
-                <SelectItem value="semanal">Weekly</SelectItem>
-                <SelectItem value="mensal">Monthly</SelectItem>
-                <SelectItem value="trimestral">Quarterly</SelectItem>
-                <SelectItem value="anual">Annual</SelectItem>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="quarterly">Quarterly</SelectItem>
+                <SelectItem value="annual">Annual</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -191,11 +191,11 @@ export const Calculator = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="diaria">Daily (365/yr)</SelectItem>
-                <SelectItem value="semanal">Weekly (52/yr)</SelectItem>
-                <SelectItem value="mensal">Monthly (12/yr)</SelectItem>
-                <SelectItem value="trimestral">Quarterly (4/yr)</SelectItem>
-                <SelectItem value="anual">Yearly (1/yr)</SelectItem>
+                <SelectItem value="daily">Daily (360/yr)</SelectItem>
+                <SelectItem value="weekly">Weekly (52/yr)</SelectItem>
+                <SelectItem value="monthly">Monthly (12/yr)</SelectItem>
+                <SelectItem value="quarterly">Quarterly (4/yr)</SelectItem>
+                <SelectItem value="annual">Yearly (1/yr)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -432,10 +432,10 @@ export const Calculator = () => {
                   }
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  <option value="anual">Anual</option>
-                  <option value="mensal">Mensal</option>
-                  <option value="semanal">Semanal</option>
-                  <option value="diaria">Diária</option>
+                  <option value="annual">Anual</option>
+                  <option value="monthly">Mensal</option>
+                  <option value="weekly">Semanal</option>
+                  <option value="daily">Diária</option>
                 </select>
               </div>
               <div>
