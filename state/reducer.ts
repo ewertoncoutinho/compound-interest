@@ -2,66 +2,128 @@ import { CalculatorState, CalculatorAction } from "@/state/types";
 
 export const initialState: CalculatorState = {
   currency: 'R$',
-  initialInvestment: 5000,
+  initialInvestment: 1000,
   regularDeposit: 0,
   regularWithdrawal: 0,
-  depositFrequency: "mensal",
-  compoundFrequency: "mensal",
-  interestRate: 5,
-  interestRateFrequency: "anual",
+  depositFrequency: "monthly",
+  compoundFrequency: "monthly",
+  interestRate: 10,
+  interestRateFrequency: "monthly",
   movementType: "none",
   depositTiming: "end",
-  years: 5,
+  years: 1,
   months: 0,
   results: {
-    "finalBalance": 6416.79,
-    "totalPrincipal": 5000,
-    "totalInterest": 1416.79
+    "finalBalance": 3138.43,
+    "totalInterest": 2138.43,
+    "totalPrincipal": 1000,
   },
   breakdown: [
     {
-      "year": 0,
+      "month": 0,
+      "withdrawals": 0,
       "startingBalance": 0,
       "deposits": 0,
       "interest": 0,
-      "endBalance": 5000
+      "endBalance": 1000
     },
     {
-      "year": 1,
-      "startingBalance": 5000,
+      "month": 1,
+      "startingBalance": 1100,
       "deposits": 0,
-      "interest": 255.81,
-      "endBalance": 5255.81
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1100
     },
     {
-      "year": 2,
-      "startingBalance": 5255.81,
+      "month": 2,
+      "startingBalance": 1210,
       "deposits": 0,
-      "interest": 268.90,
-      "endBalance": 5524.71
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1210
     },
     {
-      "year": 3,
-      "startingBalance": 5524.71,
+      "month": 3,
+      "startingBalance": 1331,
       "deposits": 0,
-      "interest": 282.65,
-      "endBalance": 5807.36
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1331
     },
     {
-      "year": 4,
-      "startingBalance": 5807.36,
+      "month": 4,
+      "startingBalance": 1464.1,
       "deposits": 0,
-      "interest": 297.12,
-      "endBalance": 6104.48
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1464.1
     },
     {
-      "year": 5,
-      "startingBalance": 6104.48,
+      "month": 5,
+      "startingBalance": 1610.51,
       "deposits": 0,
-      "interest": 312.32,
-      "endBalance": 6416.79
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1610.51
+    },
+    {
+      "month": 6,
+      "startingBalance": 1771.5610000000001,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1771.5610000000001
+    },
+    {
+      "month": 7,
+      "startingBalance": 1948.7171000000003,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 1948.7171000000003
+    },
+    {
+      "month": 8,
+      "startingBalance": 2143.58881,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 2143.58881
+    },
+    {
+      "month": 9,
+      "startingBalance": 2357.9476910000003,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 2357.9476910000003
+    },
+    {
+      "month": 10,
+      "startingBalance": 2593.7424601000002,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 2593.7424601000002
+    },
+    {
+      "month": 11,
+      "startingBalance": 2853.1167061100005,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 2853.1167061100005
+    },
+    {
+      "month": 12,
+      "startingBalance": 3138.4283767210004,
+      "deposits": 0,
+      "withdrawals": 0,
+      "interest": 0,
+      "endBalance": 3138.4283767210004
     }
-  ],
+  ]
 };
 
 export function calculatorReducer(state: CalculatorState, action: CalculatorAction): CalculatorState {

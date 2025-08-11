@@ -118,5 +118,9 @@
   }
   body {
     @apply bg-background text-foreground;
+
+    tbody tr:nth-child(12n + 1):not(:first-child) {
+      @apply bg-neutral-800;
+    }
   }
 }
