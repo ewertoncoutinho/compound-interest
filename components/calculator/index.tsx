@@ -191,7 +191,7 @@ export const Calculator = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="daily">Daily (360/yr)</SelectItem>
+                <SelectItem value="daily">Daily (365/yr)</SelectItem>
                 <SelectItem value="weekly">Weekly (52/yr)</SelectItem>
                 <SelectItem value="monthly">Monthly (12/yr)</SelectItem>
                 <SelectItem value="quarterly">Quarterly (4/yr)</SelectItem>

@@ -11,7 +11,7 @@ const frequencyMap: Record<Frequency, number> = {
   quarterly: 4,
   monthly: 12,
   weekly: 52,
-  daily: 360,
+  daily: 365,
 };
 
 export function calculateCompoundInterest(params: {
@@ -38,7 +38,7 @@ export function calculateCompoundInterest(params: {
     movementType,
   } = params;
 
-  const monthsInYear = 360;
+  const monthsInYear = 365;
   const totalMonths = Math.floor(termInYears * monthsInYear);
 
   const compoundFreqMonthsRaw = monthsInYear / frequencyMap[compoundFrequency];
@@ -71,7 +71,7 @@ export function calculateCompoundInterest(params: {
     let withdrawalsThisMonth = 0;
     let interestThisMonth = 0;
 
-    if ((month - 1) % depositFreqMonths === 0) {
+    if (month % depositFreqMonths === 0) {
       if (movementType === "deposits" || movementType === "both") {
         currentBalance += regularDeposit;
         depositsThisMonth = regularDeposit;
@@ -84,24 +84,20 @@ export function calculateCompoundInterest(params: {
       }
     }
 
-    if ((month - 1) % compoundFreqMonths === 0) {
+    if (month % compoundFreqMonths === 0) {
       interestThisMonth = currentBalance * periodicRate;
       currentBalance += interestThisMonth;
     }
-
-    if (month % 30 === 0) {
       breakdown.push({
-        month: month / 30,
+        month: month,
         startingBalance,
         deposits: depositsThisMonth,
         withdrawals: withdrawalsThisMonth,
         interest: interestThisMonth,
         endBalance: currentBalance,
-      });
-    }
+      });    
   }
   
-  console.log("🚀 ~ calculateCompoundInterest ~ breakdown:", breakdown)
   const totalPrincipal = initialInvestment + totalDeposits - totalWithdrawals;
 
   return {
