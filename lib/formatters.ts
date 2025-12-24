@@ -22,3 +22,22 @@ export const formatCurrency = (
     currencyDisplay: 'narrowSymbol'
   }).format(value);
 };
+
+export function formatMonthsToYearsMonths(value: number): string {
+  const years = Math.floor(value / 12);
+  const months = value % 12;
+  let result = "";
+
+  if (years > 0) {
+    result += `${years} year${years > 1 ? "s" : ""}`;
+  }
+
+  if (months > 0) {
+    if (result.length > 0) {
+      result += " and ";
+    }
+    result += `${months} month${months > 1 ? "s" : ""}`;
+  }
+
+  return result || "0 month";
+}

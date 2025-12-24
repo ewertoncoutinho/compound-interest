@@ -1,17 +1,18 @@
-export type Frequency = "anual" | "trimestral" | "mensal" | "semanal" | "diaria";
+export type Frequency = "annual" | "quarterly" | "monthly" | "weekly" | "daily";
 export type DepositTiming = "end" | "beginning";
 export type MovementType = "none" | "deposits" | "withdrawals" | "both";
 
-export interface CalculationResult {
+export type CalculationResult = {
   finalBalance: number;
   totalPrincipal: number;
   totalInterest: number;
 }
 
-export interface YearlyBreakdown {
-  year: number;
+export type Breakdown = {
+  month: number;
   startingBalance: number;
   deposits: number;
+  withdrawals: number;
   interest: number;
   endBalance: number;
-}
+};
